@@ -1,6 +1,6 @@
 % allison = 1 hanna = 2 iris = 3 kendra = 4 leigha = 5 megan = 6
 subject = ["Allison" "Hanna" "Iris" "Kendra" "Leigha" "Megan"];
-fs = 200; i = 1;
+fs = 200; i = 1; ave_hr_ten_sec_all = 0;
 
 % Calculate each person's average heart rate one by one
 for i = 1:6
@@ -51,13 +51,18 @@ for i = 1:6
     [Q,R,S] = qrs(trial,fs);
     [hr_ave_trial] = hr(R,fs);
     fprintf("TRIAL: num Q: %d, num R: %d, num S: %d\n",length(Q), length(R), length(S));
-
+    
+    %calculate average heart rate every ten seconds
+    hr_ave_ten_sec = zeros(floor(length(R)/10), 1);
+    for i = 1 : length(hr_ave_ten_sec)
+        hr_avg_ten_sec(i) = hr(R((1+(i-1)*(10-1)):(i*10)),fs);
+    end
     [Q,R,S] = qrs(after,fs);
     [hr_ave_after] = hr(R,fs);
     fprintf("AFTER: num Q: %d, num R: %d, num S: %d\n",length(Q), length(R), length(S));
 
     fprintf("Control: %.02f, Trial: %.02f, After: %.02f. \n", hr_ave_control, hr_ave_trial, hr_ave_after);
-
+    clear hr_avg_ten_sec;
 end
 
 
